@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LovePulse - Calculator 💖</title>
+  <link rel="icon" href="heart.png" type="image/png" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #ff4b91, #1f1f2e 70%);
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ff85b3;
+      animation: fadeIn 1s ease-out;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    button {
+      padding: 12px 25px;
+      background: #ff4b91;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      margin-top: 15px;
+      box-shadow: 0 0 15px #ff4b91;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #e03a7e;
+      box-shadow: 0 0 25px #ff4b91, 0 0 40px #ff4b91;
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #ffe3f1;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 2s steps(30) 1s forwards;
+    }
+
+    .heart {
+      font-size: 40px;
+      margin-bottom: 10px;
+      animation: pulse 1.2s infinite;
+      color: #ff4b91;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Falling hearts */
+    .heart-particle {
+      position: absolute;
+      top: -50px;
+      animation: fall 5s infinite;
+      font-size: 30px;
+      color: rgba(255, 85, 170, 0.8);
+      z-index: -1;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Falling Hearts Effect -->
+  <div class="heart-particle" style="left: 10%; animation-delay: 0s;">❤️</div>
+  <div class="heart-particle" style="left: 20%; animation-delay: 1s;">❤️</div>
+  <div class="heart-particle" style="left: 30%; animation-delay: 2s;">❤️</div>
+  <div class="heart-particle" style="left: 40%; animation-delay: 3s;">❤️</div>
+  <div class="heart-particle" style="left: 50%; animation-delay: 4s;">❤️</div>
+  <div class="heart-particle" style="left: 60%; animation-delay: 1s;">❤️</div>
+  <div class="heart-particle" style="left: 70%; animation-delay: 2s;">❤️</div>
+
+  <div class="card">
+    <h1>💘 LovePulse</h1>
+    <input type="text" id="name1" placeholder="Your name" />
+    <input type="text" id="name2" placeholder="Her name" />
+    <button onclick="calculateLove()">Calculate ❤️</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Custom Background Music
+     const music = new Audio('https://prosearch.tribeofnoise.com/artists/show/58004/38826');
+  music.loop = true;
+  music.volume = 0.2;
+
+  // Add a one-time event listener for user interaction
+  function enableAudio() {
+    music.play();
+    document.removeEventListener('click', enableAudio);
+    document.removeEventListener('keydown', enableAudio);
+  }
+
+  document.addEventListener('click', enableAudio);
+  document.addEventListener('keydown', enableAudio);
+
+    // Calculate Love Function
+    function calculateLove() {
+      const name1 = document.getElementById('name1').value.trim().toLowerCase();
+      const name2 = document.getElementById('name2').value.trim().toLowerCase();
+      const resultDiv = document.getElementById('result');
+
+      if (!name1 || !name2) {
+        resultDiv.innerHTML = "Please enter both names!";
+        return;
+      }
+
+      let lovePercent = Math.floor((name1.length + name2.length) * 2.5) % 100; // Simple formula
+      resultDiv.innerHTML = `
+        <div class="heart">❤️</div>
+        <p><strong>${lovePercent}% compatibility</strong></p>
+        <p>This could be a match made in love heaven!</p>
+      `;
+    }
+
+    // Save result as image
+    function saveAsImage() {
+      html2canvas(document.querySelector(".card")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "love_calculator_result.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+  </script>
+
+  <!-- Include html2canvas for saving image -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+</body>
+</html>
